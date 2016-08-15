@@ -36,7 +36,10 @@ public class Main2Activity extends AppCompatActivity {
                 emailid = EMAIL.getText().toString();
                 databaseOperations dbo = new databaseOperations(ctx);
                 Boolean flag=false;
-                if((!name.equals(null))&&(!mobileNo.equals(null))&&(!emailid.equals(null))) {
+
+                Log.v("123",name+","+(name==null)+","+name.equals(""));
+
+                if((!name.equals(""))&&(!mobileNo.equals(""))&&(!emailid.equals(""))) {
                     dbo.putInformation(dbo,name,mobileNo,emailid);
                     Intent intent = new Intent();
                     flag=true;

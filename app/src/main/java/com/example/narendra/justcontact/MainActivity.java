@@ -25,18 +25,24 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-    ArrayList<String> listItems=new ArrayList<String>();
+    //ArrayList<String> listItems=new ArrayList<String>();
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
-    public ArrayAdapter<String> adapter;
+    //public ArrayAdapter<String> adapter;
 
     //RECORDING HOW MANY TIMES THE BUTTON HAS BEEN CLICKED
-    //int clickCounter=0;
-    Boolean flag;
+    CustomList adapter;
+    ListView list;
+    Vector<String> web;
+    Integer[] imageId = {
+            R.drawable.pro1
+    };
+    Boolean flag=false;
     Context ctx = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +51,35 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        adapter=new ArrayAdapter<String>(this,R.layout.mytextview, listItems);
-        ListView listview = (ListView) findViewById(R.id.list);
+        web=new Vector<>();
+
+        adapter = new CustomList(MainActivity.this, web, imageId);
+        list=(ListView)findViewById(R.id.list);
+
+
+        // adapter=new ArrayAdapter<String>(this,R.layout.mytextview, listItems);
+        //ListView listview = (ListView) findViewById(R.id.list);
         databaseOperations dbo = new databaseOperations(ctx);
         Cursor CR = dbo.getInformation(dbo);
         CR.moveToFirst();
-        do
-        {
-            listItems.add(CR.getString(0)+"    "+CR.getString(1)+"\nEmail : "+CR.getString(2));
+        if(CR.moveToFirst()) {
+             do{
+                 web.add(CR.getString(0) + "    " + CR.getString(1) + "\nEmail : " + CR.getString(2));
 
-        }while (CR.moveToNext());
-        listview.setAdapter(adapter);
+
+            }while (CR.moveToNext());
+        }
+        //listview.setAdapter(adapter);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(MainActivity.this, "You Clicked at " +web.get(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,18 +98,18 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
-                flag=data.getBooleanExtra("flag",true);
+                flag=data.getBooleanExtra("flag",false);
             }
         }
-        listItems.clear();
+
         if(flag==true)
-        {
+        {   web.clear();
             databaseOperations dbo = new databaseOperations(ctx);
             Cursor CR = dbo.getInformation(dbo);
             CR.moveToFirst();
             do
             {
-                listItems.add(CR.getString(0)+"    "+CR.getString(1)+"\nEmail : "+CR.getString(2));
+                web.add(CR.getString(0) + "    " + CR.getString(1) + "\nEmail : " + CR.getString(2));
 
             }while (CR.moveToNext());
         }

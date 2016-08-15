@@ -20,18 +20,23 @@
             android:id="@+id/name"
             android:layout_marginTop="45dp"
             android:paddingLeft="15dp"
+            android:maxLines="1"
+            android:inputType="textPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"/>
     </LinearLayout>
     <EditText
         android:id="@+id/contact_no"
+        android:inputType="phone"
         android:layout_width="match_parent"
         android:layout_marginTop="36dp"
         android:layout_height="wrap_content"
         android:hint="Contact no."/>
     <EditText
         android:id="@+id/email_id"
+        android:maxLines="1"
+        android:inputType="textWebEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"/>
