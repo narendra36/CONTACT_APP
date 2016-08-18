@@ -44,4 +44,24 @@ public class databaseOperations extends SQLiteOpenHelper {
         Cursor CR =Db.query(TableData.TableInfo.TABLE_NAME,columns,null,null,null,null,null);
         return CR;
     }
+    public void deleteElement(databaseOperations db,String name,String contactNo ,String email){
+        SQLiteDatabase DB = db.getWritableDatabase();
+        String selection = TableData.TableInfo.USER_NAME+" LIKE ? AND "+TableData.TableInfo.CONTACT_NO+" LIKE ? AND "+ TableData.TableInfo.EMAIL_ID+" LIKE ?";
+        String args[] = {name,contactNo,email};
+        DB.delete(TableData.TableInfo.TABLE_NAME,selection,args);
+        Log.d("databses operations ","single row deleted");
+    }
+
+    public void updateInfo(databaseOperations db,String name,String contact,String email,String Nname,String Ncontact,String Nemail )
+    {
+        SQLiteDatabase DB = db.getWritableDatabase();
+        String selection = TableData.TableInfo.USER_NAME+" LIKE ? AND "+TableData.TableInfo.CONTACT_NO+" LIKE ? AND "+ TableData.TableInfo.EMAIL_ID+" LIKE ?";
+        String args[] = {name,contact ,email};
+        ContentValues cv = new ContentValues();
+        cv.put(TableData.TableInfo.USER_NAME,Nname);
+        cv.put(TableData.TableInfo.CONTACT_NO,Ncontact);
+        cv.put(TableData.TableInfo.EMAIL_ID,Nemail);
+        DB.update(TableData.TableInfo.TABLE_NAME,cv,selection,args);
+        Log.d("databses operations ","single row has been updated");
+    }
 }

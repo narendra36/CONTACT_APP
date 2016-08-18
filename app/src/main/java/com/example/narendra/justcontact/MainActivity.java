@@ -76,8 +76,64 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(MainActivity.this, "You Clicked at " +web.get(position), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, "You Clicked at " +web.get(position), Toast.LENGTH_SHORT).show();
 
+            }
+        });
+        list.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
+            @SuppressWarnings("rawtypes")
+            public boolean onItemLongClick(AdapterView parent, View view, final int position, long id) {
+                final CharSequence[] items = { "Delete" ,"Edit"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+
+                builder.setTitle("Action:");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int item) {
+                        databaseOperations dbo = new databaseOperations(ctx);
+                        Cursor CR = dbo.getInformation(dbo);
+                        if(item==0){
+                            CR.moveToFirst();
+                            String name="",cont="",eml="";
+
+                            CR.move(position);
+                            name = CR.getString(0);
+                            cont = CR.getString(1);
+                            eml =  CR.getString(2);
+
+                            Log.d("###",name+" contact : "+cont+" email : "+eml);
+                            dbo.deleteElement(dbo,name,cont,eml);
+                            web.remove(position);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                        else if(item==1){
+                            Log.d("###","I am in item 1");
+                            CR.moveToFirst();
+                            String name="",cont="",eml="";
+
+                            CR.move(position);
+                            name = CR.getString(0);
+                            cont = CR.getString(1);
+                            eml =  CR.getString(2);
+                            Bundle b = new Bundle();
+                            Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                            b.putString("name",name);
+                            b.putString("contact",cont);
+                            b.putString("email",eml);
+                            intent.putExtras(b);
+                            startActivityForResult(intent, 1);
+                        }
+                    }
+
+                });
+
+                AlertDialog alert = builder.create();
+
+                alert.show();
+                //do your stuff here
+                return false;
             }
         });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

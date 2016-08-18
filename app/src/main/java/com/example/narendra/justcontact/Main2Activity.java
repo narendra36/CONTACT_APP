@@ -17,8 +17,11 @@ import java.lang.String;
 public class Main2Activity extends AppCompatActivity {
     String name,emailid;
     String mobileNo;
+    String oldname,oldcontact,oldemail;
     EditText NAME,CONTACT,EMAIL;
     Button BTN;
+    Bundle b;
+    Intent i;
     Context ctx = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,17 @@ public class Main2Activity extends AppCompatActivity {
         CONTACT = (EditText) findViewById(R.id.contact_no);
         EMAIL = (EditText) findViewById(R.id.email_id);
         BTN = (Button) findViewById(R.id.save_data_btn);
+        i=getIntent();
+        b=i.getExtras();
+        if(b!=null)
+        {
+            oldname= b.getString("name");
+            oldcontact= b.getString("contact");
+            oldemail= b.getString("email");
+            NAME.setText(oldname);
+            CONTACT.setText(oldcontact);
+            EMAIL.setText(oldemail);
+        }
         BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +54,13 @@ public class Main2Activity extends AppCompatActivity {
                 Log.v("123",name+","+(name==null)+","+name.equals(""));
 
                 if((!name.equals(""))&&(!mobileNo.equals(""))&&(!emailid.equals(""))) {
-                    dbo.putInformation(dbo,name,mobileNo,emailid);
+                    if(b!=null)
+                    {
+                        dbo.updateInfo(dbo,oldname,oldcontact,oldemail,name,mobileNo,emailid);
+                    }
+                    else {
+                        dbo.putInformation(dbo, name, mobileNo, emailid);
+                    }
                     Intent intent = new Intent();
                     flag=true;
                     intent.putExtra("flag",flag);
