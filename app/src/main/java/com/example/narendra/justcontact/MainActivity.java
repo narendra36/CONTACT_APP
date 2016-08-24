@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
     //RECORDING HOW MANY TIMES THE BUTTON HAS BEEN CLICKED
     CustomList adapter;
     ListView list;
-    Vector<String> web;
+    Vector<String> names;
+    Vector<String> contacts;
+    Vector<String> emails;
+
     Integer[] imageId = {
             R.drawable.pro1
     };
@@ -51,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        web=new Vector<>();
-
-        adapter = new CustomList(MainActivity.this, web, imageId);
+        names=new Vector<>();
+        contacts=new Vector<>();
+        emails=new Vector<>();
+        adapter = new CustomList(MainActivity.this, names,contacts,emails , imageId);
         list=(ListView)findViewById(R.id.list);
 
 
@@ -64,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
         CR.moveToFirst();
         if(CR.moveToFirst()) {
              do{
-                 web.add(CR.getString(0) + "    " + CR.getString(1) + "\nEmail : " + CR.getString(2));
-
+                 names.add(CR.getString(0));
+                 contacts.add(CR.getString(1));
+                 emails.add(CR.getString(2));
 
             }while (CR.moveToNext());
         }
@@ -104,7 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.d("###",name+" contact : "+cont+" email : "+eml);
                             dbo.deleteElement(dbo,name,cont,eml);
-                            web.remove(position);
+                            names.remove(position);
+                            contacts.remove(position);
+                            emails.remove(position);
                             adapter.notifyDataSetChanged();
 
                         }
@@ -159,13 +166,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(flag==true)
-        {   web.clear();
+        {   names.clear();
+            contacts.clear();
+            emails.clear();
             databaseOperations dbo = new databaseOperations(ctx);
             Cursor CR = dbo.getInformation(dbo);
             CR.moveToFirst();
             do
             {
-                web.add(CR.getString(0) + "    " + CR.getString(1) + "\nEmail : " + CR.getString(2));
+                names.add(CR.getString(0));
+                contacts.add(CR.getString(1));
+                emails.add(CR.getString(2));
 
             }while (CR.moveToNext());
         }

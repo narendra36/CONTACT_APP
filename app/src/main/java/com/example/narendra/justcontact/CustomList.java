@@ -15,22 +15,29 @@ import java.util.Vector;
 
 public class CustomList extends ArrayAdapter<String>{
     private final Activity context;
-    private final Vector<String> web;
+    private final Vector<String> namess;
+    private final Vector<String> contactss;
+    private final Vector<String> emailss;
     private final Integer[] imageId;
-    public CustomList(Activity context, Vector<String> web, Integer[] imageId) {
-        super(context, R.layout.mytextview, web);
+    public CustomList(Activity context, Vector<String> names,Vector<String> contacts,Vector<String> emails, Integer[] imageId) {
+        super(context, R.layout.mytextview, names);
         this.context = context;
-        this.web = web;
+        namess = names;
+        contactss = contacts;
+        emailss = emails;
         this.imageId = imageId;
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.mytextview, null, true);
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.text1);
+        TextView txtTitle1 = (TextView) rowView.findViewById(R.id.text1);
+        TextView txtTitle2 = (TextView) rowView.findViewById(R.id.text2);
+        TextView txtTitle3 = (TextView) rowView.findViewById(R.id.text3);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-        txtTitle.setText(web.get(position));
-
+        txtTitle1.setText(namess.get(position));
+        txtTitle2.setText(contactss.get(position));
+        txtTitle3.setText(emailss.get(position));
         imageView.setImageResource(imageId[0]);
         return rowView;
     }
