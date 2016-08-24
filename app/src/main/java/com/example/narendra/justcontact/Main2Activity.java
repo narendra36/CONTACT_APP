@@ -20,9 +20,8 @@ import java.util.ArrayList;
 import java.lang.String;
 
 public class Main2Activity extends AppCompatActivity {
-    String name,emailid;
-    String mobileNo;
-    String oldname,oldcontact,oldemail;
+    String name,emailid,mobileNo,picturePath="";
+    String oldname,oldcontact,oldemail,oldppath="";
     EditText NAME,CONTACT,EMAIL;
     Button BTN;
     Bundle b;
@@ -45,9 +44,18 @@ public class Main2Activity extends AppCompatActivity {
             oldname= b.getString("name");
             oldcontact= b.getString("contact");
             oldemail= b.getString("email");
+            oldppath = b.getString("ppath");
             NAME.setText(oldname);
             CONTACT.setText(oldcontact);
             EMAIL.setText(oldemail);
+            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+            if(oldppath!=null) {
+                imageView.setImageBitmap(BitmapFactory.decodeFile(oldppath));
+            }
+            else{
+                imageView.setImageResource(R.drawable.pro1);
+            }
+            Log.d("Image is decoding >>","It's Done !!!");
         }
         BTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,11 +70,14 @@ public class Main2Activity extends AppCompatActivity {
 
                 if((!name.equals(""))&&(!mobileNo.equals(""))&&(!emailid.equals(""))) {
                     if(b!=null)
-                    {
-                        dbo.updateInfo(dbo,oldname,oldcontact,oldemail,name,mobileNo,emailid);
+                    {   if(picturePath.length()==0)
+                        {
+                            picturePath=oldppath;
+                        }
+                        dbo.updateInfo(dbo,oldname,oldcontact,oldemail,oldppath,name,mobileNo,emailid,picturePath);
                     }
                     else {
-                        dbo.putInformation(dbo, name, mobileNo, emailid);
+                        dbo.putInformation(dbo, name, mobileNo, emailid,picturePath);
                     }
                     Intent intent = new Intent();
                     flag=true;
@@ -104,7 +115,7 @@ public class Main2Activity extends AppCompatActivity {
             Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             cursor.close();
             ImageView imageView = (ImageView) findViewById(R.id.imgView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));

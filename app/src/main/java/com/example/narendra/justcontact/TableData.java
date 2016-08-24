@@ -17,5 +17,6 @@ public class TableData {
         public static final String EMAIL_ID = "email_id";
         public static final String DATABASE_NAME = "mydatabase";
         public static final String TABLE_NAME = "user_info";
+        public static final String PROFILE_PATH = "profile_path";
     }
 }

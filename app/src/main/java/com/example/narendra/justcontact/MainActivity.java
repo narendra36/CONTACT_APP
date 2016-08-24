@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     ListView list;
     Vector<String> names;
     Vector<String> contacts;
-    Vector<String> emails;
+    Vector<String> emails,picpaths;
 
     Integer[] imageId = {
-            R.drawable.pro1
+            R.drawable.pro2
     };
     Boolean flag=false;
     Context ctx = this;
@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         names=new Vector<>();
         contacts=new Vector<>();
         emails=new Vector<>();
-        adapter = new CustomList(MainActivity.this, names,contacts,emails , imageId);
+        picpaths=new Vector<>();
+        adapter = new CustomList(MainActivity.this, names,contacts,emails , imageId,picpaths);
         list=(ListView)findViewById(R.id.list);
 
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                  names.add(CR.getString(0));
                  contacts.add(CR.getString(1));
                  emails.add(CR.getString(2));
+                 picpaths.add(CR.getString(3));
 
             }while (CR.moveToNext());
         }
@@ -97,38 +99,34 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int item) {
                         databaseOperations dbo = new databaseOperations(ctx);
-                        Cursor CR = dbo.getInformation(dbo);
                         if(item==0){
-                            CR.moveToFirst();
-                            String name="",cont="",eml="";
-
-                            CR.move(position);
-                            name = CR.getString(0);
-                            cont = CR.getString(1);
-                            eml =  CR.getString(2);
-
-                            Log.d("###",name+" contact : "+cont+" email : "+eml);
-                            dbo.deleteElement(dbo,name,cont,eml);
+                            String name="",cont="",eml="",ppath="";
+                            name = names.get(position);
+                            cont = contacts.get(position);
+                            eml =  emails.get(position);
+                            ppath = picpaths.get(position);
+                            dbo.deleteElement(dbo,name,cont,eml,ppath);
                             names.remove(position);
                             contacts.remove(position);
                             emails.remove(position);
+                            picpaths.remove(position);
+                            Log.d("deleting data Path >>>",picpaths+"");
                             adapter.notifyDataSetChanged();
 
                         }
                         else if(item==1){
                             Log.d("###","I am in item 1");
-                            CR.moveToFirst();
-                            String name="",cont="",eml="";
-
-                            CR.move(position);
-                            name = CR.getString(0);
-                            cont = CR.getString(1);
-                            eml =  CR.getString(2);
+                            String name="",cont="",eml="",ppath="";
+                            name = names.get(position);
+                            cont = contacts.get(position);
+                            eml =  emails.get(position);
+                            ppath = picpaths.get(position);
                             Bundle b = new Bundle();
                             Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                             b.putString("name",name);
                             b.putString("contact",cont);
                             b.putString("email",eml);
+                            b.putString("ppath",ppath);
                             intent.putExtras(b);
                             startActivityForResult(intent, 1);
                         }
@@ -169,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         {   names.clear();
             contacts.clear();
             emails.clear();
+            picpaths.clear();
             databaseOperations dbo = new databaseOperations(ctx);
             Cursor CR = dbo.getInformation(dbo);
             CR.moveToFirst();
@@ -177,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 names.add(CR.getString(0));
                 contacts.add(CR.getString(1));
                 emails.add(CR.getString(2));
+                picpaths.add(CR.getString(3));
 
             }while (CR.moveToNext());
         }

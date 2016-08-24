@@ -4,6 +4,8 @@ package com.example.narendra.justcontact;
  * Created by narendra on 8/15/16.
  */
 import android.app.Activity;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +20,15 @@ public class CustomList extends ArrayAdapter<String>{
     private final Vector<String> namess;
     private final Vector<String> contactss;
     private final Vector<String> emailss;
+    private final Vector<String> picpathss;
     private final Integer[] imageId;
-    public CustomList(Activity context, Vector<String> names,Vector<String> contacts,Vector<String> emails, Integer[] imageId) {
+    public CustomList(Activity context, Vector<String> names,Vector<String> contacts,Vector<String> emails, Integer[] imageId,Vector<String> picpaths) {
         super(context, R.layout.mytextview, names);
         this.context = context;
         namess = names;
         contactss = contacts;
         emailss = emails;
+        picpathss=picpaths;
         this.imageId = imageId;
     }
     @Override
@@ -38,7 +42,13 @@ public class CustomList extends ArrayAdapter<String>{
         txtTitle1.setText(namess.get(position));
         txtTitle2.setText(contactss.get(position));
         txtTitle3.setText(emailss.get(position));
-        imageView.setImageResource(imageId[0]);
+        Log.d("Image path by user >> ",""+picpathss.get(position).length());
+        if(picpathss.get(position).length()!=0) {
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picpathss.get(position)));
+        }
+        else{
+            imageView.setImageResource(imageId[0]);
+        }
         return rowView;
     }
 
